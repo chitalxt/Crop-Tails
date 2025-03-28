@@ -1,0 +1,113 @@
+[gd_scene load_steps=16 format=3 uid="uid://doad6mvcelmso"]
+
+[ext_resource type="Script" uid="uid://m6f2s10oisow" path="res://scenes/npcStates/Npc.cs" id="1_ho8vv"]
+[ext_resource type="Texture2D" uid="uid://cxji1sjef15n1" path="res://assets/game/characters/free_chicken_cprites.png" id="1_kx8lw"]
+[ext_resource type="Script" uid="uid://lhu72ic5uy4d" path="res://scripts/stateMachine/NodeStateMachine.cs" id="2_nbsbj"]
+[ext_resource type="Script" uid="uid://dt20o2csah6o0" path="res://scenes/npcStates/NpcIdleState.cs" id="3_uh2e6"]
+[ext_resource type="Script" uid="uid://c0s1hfx8pngjr" path="res://scenes/npcStates/NpcWalkState.cs" id="4_v8wud"]
+[ext_resource type="PackedScene" uid="uid://bibkj4rdqei48" path="res://audio/sfx/ChickenCluckMultipleSFX.tscn" id="6_qiwd6"]
+[ext_resource type="PackedScene" uid="uid://chy2lnbeoiu6y" path="res://scenes/components/AudioPlayTimeComponent.tscn" id="7_vdufo"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_8gvdn"]
+atlas = ExtResource("1_kx8lw")
+region = Rect2(0, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_8m8vb"]
+atlas = ExtResource("1_kx8lw")
+region = Rect2(16, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_aktha"]
+atlas = ExtResource("1_kx8lw")
+region = Rect2(0, 16, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_5tib8"]
+atlas = ExtResource("1_kx8lw")
+region = Rect2(16, 16, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_kjrs3"]
+atlas = ExtResource("1_kx8lw")
+region = Rect2(32, 16, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_iy1u4"]
+atlas = ExtResource("1_kx8lw")
+region = Rect2(48, 16, 16, 16)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_utwbj"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_8gvdn")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_8m8vb")
+}],
+"loop": true,
+"name": &"idle",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_aktha")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_5tib8")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_kjrs3")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_iy1u4")
+}],
+"loop": true,
+"name": &"walk",
+"speed": 5.0
+}]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_7q13e"]
+radius = 4.0
+
+[node name="Chicken" type="CharacterBody2D"]
+y_sort_enabled = true
+position = Vector2(-2, 0)
+collision_layer = 64
+script = ExtResource("1_ho8vv")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+position = Vector2(0, -4)
+sprite_frames = SubResource("SpriteFrames_utwbj")
+animation = &"idle"
+autoplay = "idle"
+frame_progress = 0.685821
+offset = Vector2(0, -2)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(0, -4)
+shape = SubResource("CircleShape2D_7q13e")
+
+[node name="NavigationAgent2D" type="NavigationAgent2D" parent="."]
+path_desired_distance = 10.0
+path_postprocessing = 1
+avoidance_enabled = true
+radius = 5.0
+
+[node name="StateMachine" type="Node" parent="." node_paths=PackedStringArray("initialNodeState")]
+script = ExtResource("2_nbsbj")
+initialNodeState = NodePath("Idle")
+
+[node name="Idle" type="Node" parent="StateMachine" node_paths=PackedStringArray("npc", "animatedSprite2d")]
+script = ExtResource("3_uh2e6")
+npc = NodePath("../..")
+animatedSprite2d = NodePath("../../AnimatedSprite2D")
+
+[node name="Walk" type="Node" parent="StateMachine" node_paths=PackedStringArray("npc", "animatedSprite2d", "navigationAgent2D")]
+script = ExtResource("4_v8wud")
+npc = NodePath("../..")
+animatedSprite2d = NodePath("../../AnimatedSprite2D")
+navigationAgent2D = NodePath("../../NavigationAgent2D")
+
+[node name="ChickenCluckMultipleSFX" parent="." instance=ExtResource("6_qiwd6")]
+
+[node name="AudioPlayTimeComponent" parent="." node_paths=PackedStringArray("audioPlayerSteamPlayer2D") instance=ExtResource("7_vdufo")]
+wait_time = 20.0
+autostart = true
+audioPlayerSteamPlayer2D = NodePath("../ChickenCluckMultipleSFX")

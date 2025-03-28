@@ -1,0 +1,9 @@
+[gd_resource type="Resource" load_steps=2 format=3 uid="uid://ceis8drtkcll7"]
+
+[ext_resource type="Script" uid="uid://duvirxg7mu6bk" path="res://resource/NodeDataResource.cs" id="1_4ddj4"]
+
+[resource]
+script = ExtResource("1_4ddj4")
+globalPosition = Vector2(0, 0)
+nodePath = null
+parentNodePath = null

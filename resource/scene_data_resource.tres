@@ -1,0 +1,11 @@
+[gd_resource type="Resource" load_steps=2 format=3 uid="uid://ccnjfq08hh4mt"]
+
+[ext_resource type="Script" uid="uid://cdftmh7hvhm8h" path="res://resource/SceneDataResource.cs" id="1_rynox"]
+
+[resource]
+script = ExtResource("1_rynox")
+nodeName = ""
+sceneFilePath = ""
+globalPosition = Vector2(0, 0)
+nodePath = null
+parentNodePath = null
