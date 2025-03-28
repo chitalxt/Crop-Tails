@@ -1,0 +1,46 @@
+[gd_scene load_steps=10 format=3 uid="uid://cjqh2sdero1v"]
+
+[ext_resource type="Texture2D" uid="uid://drt1bphpcib6x" path="res://assets/game/objects/basic_grass_biom_things.png" id="1_gxbr1"]
+[ext_resource type="PackedScene" uid="uid://cehxe0tysj0kv" path="res://scenes/components/HurtComponent.tscn" id="2_5q682"]
+[ext_resource type="Script" uid="uid://d2m3782qdtjj4" path="res://scenes/objects/rocks/Rock.cs" id="2_ae7wm"]
+[ext_resource type="PackedScene" uid="uid://bpnfrjg0ekcwd" path="res://scenes/components/DamageComponent.tscn" id="3_4iibf"]
+[ext_resource type="Shader" uid="uid://c8234rk7mxlmu" path="res://scenes/objects/rocks/Shake.gdshader" id="5_0n5kh"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_0noeq"]
+resource_local_to_scene = true
+shader = ExtResource("5_0n5kh")
+shader_parameter/shake_intensity = 0.0
+shader_parameter/shake_speed = 20.0
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_7ttfb"]
+atlas = ExtResource("1_gxbr1")
+region = Rect2(128, 16, 16, 16)
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_w516q"]
+radius = 4.0
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_pjlyy"]
+radius = 6.0
+
+[node name="Rock" type="Sprite2D" node_paths=PackedStringArray("hurtComponent", "damageComponent")]
+material = SubResource("ShaderMaterial_0noeq")
+position = Vector2(0, -3)
+texture = SubResource("AtlasTexture_7ttfb")
+script = ExtResource("2_ae7wm")
+hurtComponent = NodePath("HurtComponent")
+damageComponent = NodePath("DamageComponent")
+
+[node name="StaticBody2D" type="StaticBody2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="StaticBody2D"]
+shape = SubResource("CircleShape2D_w516q")
+
+[node name="HurtComponent" parent="." instance=ExtResource("2_5q682")]
+tool = 1
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="HurtComponent"]
+shape = SubResource("CircleShape2D_pjlyy")
+debug_color = Color(0.922004, 0.131166, 0.606845, 0.42)
+
+[node name="DamageComponent" parent="." instance=ExtResource("3_4iibf")]
+MaxDamage = 5

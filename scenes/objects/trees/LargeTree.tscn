@@ -1,0 +1,48 @@
+[gd_scene load_steps=10 format=3 uid="uid://cg1jvo8di322a"]
+
+[ext_resource type="Texture2D" uid="uid://drt1bphpcib6x" path="res://assets/game/objects/basic_grass_biom_things.png" id="1_3hku0"]
+[ext_resource type="Shader" uid="uid://bom52877bi8a" path="res://scenes/objects/trees/SmallTree.gdshader" id="1_n0l6u"]
+[ext_resource type="Script" uid="uid://bjvcdlvvt5d46" path="res://scenes/objects/trees/LargeTree.cs" id="2_2ofwf"]
+[ext_resource type="PackedScene" uid="uid://cehxe0tysj0kv" path="res://scenes/components/HurtComponent.tscn" id="3_2vw83"]
+[ext_resource type="PackedScene" uid="uid://bpnfrjg0ekcwd" path="res://scenes/components/DamageComponent.tscn" id="4_d4vta"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_0lxrh"]
+resource_local_to_scene = true
+shader = ExtResource("1_n0l6u")
+shader_parameter/shake_intensity = 0.0
+shader_parameter/shake_speed = 20.0
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_wv0f2"]
+atlas = ExtResource("1_3hku0")
+region = Rect2(16, 0, 32, 32)
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_w0x8n"]
+radius = 5.09902
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_psfhr"]
+size = Vector2(17.5, 25.4414)
+
+[node name="LargeTree" type="Sprite2D"]
+material = SubResource("ShaderMaterial_0lxrh")
+position = Vector2(0, -4)
+texture = SubResource("AtlasTexture_wv0f2")
+offset = Vector2(0, -8)
+script = ExtResource("2_2ofwf")
+
+[node name="StaticBody2D" type="StaticBody2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="StaticBody2D"]
+position = Vector2(0, 3)
+shape = SubResource("CircleShape2D_w0x8n")
+
+[node name="HurtComponent" parent="." instance=ExtResource("3_2vw83")]
+tool = 1
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="HurtComponent"]
+position = Vector2(0, -7)
+shape = SubResource("RectangleShape2D_psfhr")
+debug_color = Color(0.890067, 0.187365, 0.661088, 0.42)
+
+[node name="DamageComponent" parent="." instance=ExtResource("4_d4vta")]
+position = Vector2(-21, 4)
+MaxDamage = 3

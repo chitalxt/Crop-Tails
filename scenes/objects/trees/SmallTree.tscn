@@ -1,0 +1,48 @@
+[gd_scene load_steps=10 format=3 uid="uid://yeexpu3uwg2f"]
+
+[ext_resource type="Texture2D" uid="uid://drt1bphpcib6x" path="res://assets/game/objects/basic_grass_biom_things.png" id="1_exek3"]
+[ext_resource type="Shader" uid="uid://bom52877bi8a" path="res://scenes/objects/trees/SmallTree.gdshader" id="1_fdump"]
+[ext_resource type="PackedScene" uid="uid://cehxe0tysj0kv" path="res://scenes/components/HurtComponent.tscn" id="2_76aca"]
+[ext_resource type="Script" uid="uid://cyktodrd3mmfa" path="res://scenes/objects/trees/SmallTree.cs" id="2_g5r3x"]
+[ext_resource type="PackedScene" uid="uid://bpnfrjg0ekcwd" path="res://scenes/components/DamageComponent.tscn" id="3_e3657"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_wwjwu"]
+resource_local_to_scene = true
+shader = ExtResource("1_fdump")
+shader_parameter/shake_intensity = 0.0
+shader_parameter/shake_speed = 20.0
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_wv0f2"]
+atlas = ExtResource("1_exek3")
+region = Rect2(0, 0, 16, 32)
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_w0x8n"]
+radius = 4.0
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_psfhr"]
+size = Vector2(10, 21.5312)
+
+[node name="SmallTree" type="Sprite2D"]
+material = SubResource("ShaderMaterial_wwjwu")
+position = Vector2(0, -3)
+texture = SubResource("AtlasTexture_wv0f2")
+offset = Vector2(0, -6)
+script = ExtResource("2_g5r3x")
+
+[node name="StaticBody2D" type="StaticBody2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="StaticBody2D"]
+position = Vector2(0, 1)
+shape = SubResource("CircleShape2D_w0x8n")
+
+[node name="HurtComponent" parent="." instance=ExtResource("2_76aca")]
+tool = 1
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="HurtComponent"]
+position = Vector2(0, -7)
+shape = SubResource("RectangleShape2D_psfhr")
+debug_color = Color(0.890067, 0.187365, 0.661088, 0.42)
+
+[node name="DamageComponent" parent="." instance=ExtResource("3_e3657")]
+position = Vector2(-21, 4)
+MaxDamage = 3
